@@ -7,15 +7,33 @@ export class AnnouncementController {
     ) {}
 
     getAll = (req: Request, res: Response): void => {
-        const announcements = this.announcementService.getAll();
+
+        const platform = req.query.platform as string;
+
+        const maxPrice = req.query.maxPrice
+            ? Number(req.query.maxPrice)
+            : undefined;
+
+        const type = req.query.type as string;
+
+        const sort = req.query.sort as string;
+
+        const announcements =
+            this.announcementService.getAll(
+                platform,
+                maxPrice,
+                type,
+            );
 
         res.status(200).json(announcements);
     };
 
     getById = (req: Request, res: Response): void => {
+
         const id = Number(req.params.id);
 
-        const announcement = this.announcementService.getById(id);
+        const announcement =
+            this.announcementService.getById(id);
 
         if (!announcement) {
             res.status(404).json({

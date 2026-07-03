@@ -7,8 +7,33 @@ export class AnnouncementService {
         private repository: IAnnouncementRepository
     ) {}
 
-    getAll(): Announcement[] {
-        return this.repository.findAll();
+    getAll(
+        platform?: string,
+        maxPrice?: number,
+        type?: string
+    ): Announcement[] {
+
+        let announcements = this.repository.findAll();
+
+        if (platform) {
+            announcements = announcements.filter(
+                a => a.platform === platform
+            );
+        }
+
+        if (maxPrice) {
+            announcements = announcements.filter(
+                a => a.price <= maxPrice
+            );
+        }
+
+        if (type) {
+            announcements = announcements.filter(
+                a => a.type === type
+            );
+        }
+
+        return announcements;
     }
 
     getById(id: number): Announcement | undefined {
