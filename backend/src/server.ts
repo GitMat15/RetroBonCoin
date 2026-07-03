@@ -11,6 +11,10 @@ import { FavoriteService } from "./services/FavoriteService";
 import { InMemoryFavoriteRepository } from "./repositories/memory/InMemoryFavoriteRepository";
 import { AuthController } from "./controllers/AuthController";
 import { AuthService } from "./services/AuthService";
+import { createAnnouncementRoutes } from "./routes/announcementRoutes";
+import { createUserRoutes } from "./routes/userRoutes";
+import { createFavoriteRoutes } from "./routes/favoriteRoutes";
+import { createAuthRoutes } from "./routes/authRoutes";
 
 
 const repository = new InMemoryAnnouncementRepository();
@@ -27,16 +31,10 @@ const authController = new AuthController(authService);
 
 
 app.get("/", (req, res) => {res.send("RetroBonCoin API");});
-app.get("/announcements", controller.getAll);
-app.get("/announcements/:id", controller.getById);
-app.get("/users", userController.getAll);
-app.get("/users/:id", userController.getById);
-app.get("/favorites",favoriteController.getAll);
-app.post("/favorites",favoriteController.addFavorite);
-app.delete("/favorites/:id",favoriteController.deleteFavorite);
-app.post("/auth/register",authController.register);
-app.post("/auth/login",authController.login);
-
+app.use("/announcements",createAnnouncementRoutes(controller));
+app.use("/users",createUserRoutes(userController));
+app.use("/favorites",createFavoriteRoutes(favoriteController));
+app.use("/auth",createAuthRoutes(authController));
 
 const PORT = 3000;
 
