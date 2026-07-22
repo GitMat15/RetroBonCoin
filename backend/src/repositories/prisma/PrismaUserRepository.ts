@@ -1,6 +1,8 @@
+/*
+
 import { User } from "../../models/User";
 import { IUserRepository } from "../interfaces/IUserRepository";
-import { prisma } from "../../prisma/clients";
+import { prisma } from "../../prisma/client";
 
 export class PrismaUserRepository implements IUserRepository {
 
@@ -24,3 +26,5 @@ export class PrismaUserRepository implements IUserRepository {
         return user ?? undefined;
     }
 }
+
+*/
