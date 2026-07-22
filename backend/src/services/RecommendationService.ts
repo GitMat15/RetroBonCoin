@@ -1,19 +1,39 @@
 import { Announcement } from "../models/Announcement";
 import { Favorite } from "../models/Favorite";
 
-import { IScoringStrategy }
-from "./scoring/IScoringStrategy";
+import { IScoringStrategy } from "./scoring/IScoringStrategy";
 
 export class RecommendationService {
 
-    constructor(
+    private static instance: RecommendationService;
+
+    private constructor(
         private strategy: IScoringStrategy
     ) {}
 
+    static getInstance(
+        strategy: IScoringStrategy
+    ): RecommendationService {
+
+        if (!RecommendationService.instance) {
+
+            RecommendationService.instance =
+                new RecommendationService(
+                    strategy
+                );
+        }
+
+        return RecommendationService.instance;
+    }
+
     getRecommendations(
         announcements: Announcement[],
-        favorites: Favorite[]
+        favorites: Favorite[] = []
     ) {
+
+        if (favorites.length === 0) {
+            return [];
+        }
 
         const favoriteAnnouncements =
             announcements.filter(
@@ -24,12 +44,6 @@ export class RecommendationService {
                             announcement.id
                     )
             );
-
-        if (
-            favoriteAnnouncements.length === 0
-        ) {
-            return [];
-        }
 
         const profile =
             this.buildProfile(
@@ -61,33 +75,34 @@ export class RecommendationService {
         favorites: Announcement[]
     ): number[] {
 
-        const count =
-            favorites.length;
+        const count = favorites.length;
 
         return [
+
             favorites.reduce(
                 (sum, item) =>
-                    sum + item.condition,
+                    sum + item.condition / 10,
                 0
             ) / count,
 
             favorites.reduce(
                 (sum, item) =>
-                    sum + item.popularity,
+                    sum + item.popularity / 10,
                 0
             ) / count,
 
             favorites.reduce(
                 (sum, item) =>
-                    sum + item.rarity,
+                    sum + item.rarity / 10,
                 0
             ) / count,
 
             favorites.reduce(
                 (sum, item) =>
-                    sum + item.quality,
+                    sum + item.quality / 10,
                 0
             ) / count
+
         ];
     }
 }

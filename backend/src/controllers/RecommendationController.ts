@@ -3,13 +3,13 @@ import { Request, Response } from "express";
 import { announcements } from "../data/announcements";
 
 import { RecommendationService } from "../services/RecommendationService";
-import { BarycenterScoringStrategy } from "../services/scoring/BarycenterScoringStrategy";
+import { ScoringStrategyFactory } from "../services/scoring/ScoringStrategyFactory";
 
 export class RecommendationController {
 
     private service =
-        new RecommendationService(
-            new BarycenterScoringStrategy()
+        RecommendationService.getInstance(
+            ScoringStrategyFactory.create()
         );
 
     getRecommendations = (
@@ -17,7 +17,8 @@ export class RecommendationController {
         res: Response
     ) => {
 
-        const favorites = req.body;
+        const favorites =
+            req.body ?? [];
 
         const recommendations =
             this.service.getRecommendations(
