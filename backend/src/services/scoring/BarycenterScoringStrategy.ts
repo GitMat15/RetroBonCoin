@@ -2,7 +2,7 @@ import { Announcement } from "../../models/Announcement";
 import { IScoringStrategy } from "./IScoringStrategy";
 
 export class BarycenterScoringStrategy
-implements IScoringStrategy {
+    implements IScoringStrategy {
 
     calculateScore(
         announcement: Announcement,

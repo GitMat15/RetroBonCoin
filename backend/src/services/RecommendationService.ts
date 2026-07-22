@@ -1,11 +1,14 @@
 import { Announcement } from "../models/Announcement";
 import { Favorite } from "../models/Favorite";
-import { BarycenterScoringStrategy } from "./scoring/BarycenterScoringStrategy";
+
+import { IScoringStrategy }
+from "./scoring/IScoringStrategy";
 
 export class RecommendationService {
 
-    private strategy =
-        new BarycenterScoringStrategy();
+    constructor(
+        private strategy: IScoringStrategy
+    ) {}
 
     getRecommendations(
         announcements: Announcement[],
@@ -22,15 +25,24 @@ export class RecommendationService {
                     )
             );
 
-        if (favoriteAnnouncements.length === 0) {
+        if (
+            favoriteAnnouncements.length === 0
+        ) {
             return [];
         }
 
-        const profile = this.buildProfile(
-            favoriteAnnouncements
-        );
+        const profile =
+            this.buildProfile(
+                favoriteAnnouncements
+            );
 
-        return announcements
+        const filteredAnnouncements =
+            announcements.filter(
+                announcement =>
+                    announcement.price <= 500
+            );
+
+        return filteredAnnouncements
             .map(announcement => ({
                 announcement,
                 score:
@@ -49,41 +61,33 @@ export class RecommendationService {
         favorites: Announcement[]
     ): number[] {
 
-        const count = favorites.length;
+        const count =
+            favorites.length;
 
-        const condition =
+        return [
             favorites.reduce(
                 (sum, item) =>
                     sum + item.condition,
                 0
-            ) / count;
+            ) / count,
 
-        const popularity =
             favorites.reduce(
                 (sum, item) =>
                     sum + item.popularity,
                 0
-            ) / count;
+            ) / count,
 
-        const rarity =
             favorites.reduce(
                 (sum, item) =>
                     sum + item.rarity,
                 0
-            ) / count;
+            ) / count,
 
-        const quality =
             favorites.reduce(
                 (sum, item) =>
                     sum + item.quality,
                 0
-            ) / count;
-
-        return [
-            condition,
-            popularity,
-            rarity,
-            quality
+            ) / count
         ];
     }
 }
