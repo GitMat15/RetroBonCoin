@@ -15,6 +15,8 @@ import { createAnnouncementRoutes } from "./routes/announcementRoutes";
 import { createUserRoutes } from "./routes/userRoutes";
 import { createFavoriteRoutes } from "./routes/favoriteRoutes";
 import { createAuthRoutes } from "./routes/authRoutes";
+import { RecommendationController }from "./controllers/RecommendationController";
+import { createRecommendationRoutes } from "./routes/recommendationRoutes";
 
 
 const repository = new InMemoryAnnouncementRepository();
@@ -28,6 +30,7 @@ const favoriteService = new FavoriteService(favoriteRepository);
 const favoriteController = new FavoriteController(favoriteService);
 const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
+const recommendationController = new RecommendationController();
 
 
 app.get("/", (req, res) => {res.send("RetroBonCoin API");});
@@ -35,6 +38,8 @@ app.use("/announcements",createAnnouncementRoutes(controller));
 app.use("/users",createUserRoutes(userController));
 app.use("/favorites",createFavoriteRoutes(favoriteController));
 app.use("/auth",createAuthRoutes(authController));
+app.get("/recommendations",recommendationController.getRecommendations);
+app.use("/recommendations",createRecommendationRoutes(recommendationController));
 
 const PORT = 3000;
 

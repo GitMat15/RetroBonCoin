@@ -6,4 +6,9 @@ export interface Announcement {
     platform: string;
     price: number;
     createdAt: Date;
+
+    condition: number;
+    popularity: number;
+    rarity: number;
+    quality: number;
 }
