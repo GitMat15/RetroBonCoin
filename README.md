@@ -139,13 +139,18 @@ npm install
 Lancement du projet :
 
 ```bash
+cd backend (depuis le dossier BackEnd)
+npm run dev
+
+cd frondend (depuis le dossier FrontEnd)
 npm run dev
 ```
 
 Le serveur démarre sur :
 
 ```text
-http://localhost:3000
+http://localhost:3000 (API)
+http://localhost:5173 (VITE v8.1.5)
 ```
 
 ## Données utilisées
